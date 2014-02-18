@@ -50,6 +50,17 @@ buffertools.clear = unaryAction(function() {
   return this;
 });
 
+buffertools.fill = unaryAction(function(data) {
+  var step = typeof data.length === 'undefined'? 1:data.length;
+  for (var i = 0; i < this.length; i+=step) {
+    for (var k = 0; k<step; k++) {
+      this[i+k] = typeof data.length === 'undefined'? data: 
+        (typeof data[k] === 'string'?data[k].charCodeAt(0):data[k]);
+    }
+  }
+  return this;
+});
+
 buffertools.equals = binaryAction(function(data) {
   return buffertools.compare(this, data) === 0;
 });
