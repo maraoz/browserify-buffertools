@@ -48,7 +48,7 @@ buffertools.clear = unaryAction(function() {
 });
 
 buffertools.equals = binaryAction(function(data) {
-  buffertools.compare.bind(this)(data) === 0;
+  return buffertools.compare(this, data) === 0;
 });
 
 buffertools.compare = binaryAction(function(data) {
