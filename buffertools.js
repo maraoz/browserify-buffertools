@@ -17,13 +17,38 @@ var unaryAction = function(f) {
       target = arguments[0];
       Array.prototype.shift.apply(arguments);
     } else {
-      throw Error('Argument should be a buffer object.');
+      throw new Error('Argument should be a buffer object.');
     }
-    f.apply(target, arguments);
+    return f.apply(target, arguments);
   };
 };
 
+var binaryAction = function(f) {
+  return function() {
+    var target = this;
+
+    // first argument
+    if (target instanceof Buffer) {
+    } else if (arguments[0] instanceof Buffer) {
+      target = arguments[0];
+      Array.prototype.shift.apply(arguments);
+    } else {
+      throw Error('Argument should be a buffer object.');
+    }
+
+    // second argument
+    var next = arguments[0];
+    if (typeof next == 'string' || next instanceof String || next instanceof Buffer) {
+      return f.apply(target, arguments);
+    }
+    throw new Error('Second argument must be a string or a buffer.');
+  };  
+};
+
 buffertools.clear = unaryAction(function() {
+});
+buffertools.equals = binaryAction(function() {
+
 });
 
 exports.extend = function() {

@@ -24,7 +24,11 @@ buffertools.extend();
 
 // these trigger the code paths for UnaryAction and BinaryAction
 assert.throws(function() { buffertools.clear({}); });
+assert.doesNotThrow(function() { buffertools.clear(new Buffer(32)); });
 assert.throws(function() { buffertools.equals({}, {}); });
+assert.throws(function() { buffertools.equals(new Buffer(32), {}); });
+assert.doesNotThrow(function() { buffertools.equals(new Buffer(32), '123123'); });
+assert.doesNotThrow(function() { buffertools.equals(new Buffer(32), new Buffer(48)); });
 
 var a = new Buffer('abcd'), b = new Buffer('abcd'),  c = new Buffer('efgh');
 assert.ok(a.equals(b));
@@ -110,24 +114,6 @@ assert.equal('For great justice.', new Buffer('.ecitsuj taerg roF').reverse());
 var endOfHeader = new Buffer('\r\n\r\n');
 assert.equal(0, endOfHeader.indexOf(endOfHeader));
 assert.equal(0, endOfHeader.indexOf('\r\n\r\n'));
-
-// feature request, see https://github.com/bnoordhuis/node-buffertools/issues#issue/8
-var closed = false;
-var stream = new WritableBufferStream();
-
-stream.on('close', function() { closed = true; });
-stream.write('Hello,');
-stream.write(' ');
-stream.write('world!');
-stream.end();
-
-assert.equal(true, closed);
-assert.equal(false, stream.writable);
-assert.equal('Hello, world!', stream.toString());
-assert.equal('Hello, world!', stream.getBuffer().toString());
-
-// closed stream should throw
-assert.throws(function() { stream.write('ZIG!'); });
 
 // GH-10 indexOf sometimes incorrectly returns -1
 for (var i = 0; i < 100; i++) {
