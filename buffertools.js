@@ -44,7 +44,10 @@ var binaryAction = function(f) {
 };
 
 buffertools.clear = unaryAction(function() {
-
+  for (var i = 0; i < this.length; i++) {
+    this[i] = 0;
+  }
+  return this;
 });
 
 buffertools.equals = binaryAction(function(data) {
