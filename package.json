@@ -1,0 +1,23 @@
+{
+  "name": "browserify-buffertools",
+  "description": "A JavaScript implementation of node-buffertools to work in the browser",
+  "version": "1.0.0",
+  "keywords": [
+    "buffer", 
+    "buffers",
+    "browserify"
+  ],
+  "repository" : {
+    "type": "git",
+    "url": "https://github.com/maraoz/browserify-buffertools"
+  },
+  "main": "buffertools",
+  "author": {
+    "name": "Manuel Araoz",
+    "email": "manuelaraoz@gmail.com"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "license": "MIT",
+}
