@@ -1,18 +1,22 @@
 'use strict';
 
-var SlowBuffer = require('buffer').SlowBuffer;
-var Buffer = require('buffer').Buffer;
 
 // requires node 3.1
 var events = require('events');
 var util = require('util');
 
 var buffertools = {};
+module.exports.Buffer = Buffer;
+
+
+var is_buffer = function(x) {
+  return x instanceof Buffer || x instanceof Uint8Array;
+};
 
 var unaryAction = function(f) {
   return function() {
     var target = this;
-    if (target instanceof Buffer) {} else if (arguments[0] instanceof Buffer) {
+    if (is_buffer(target)) {} else if (is_buffer(arguments[0])) {
       target = arguments[0];
       Array.prototype.shift.apply(arguments);
     } else {
@@ -27,7 +31,7 @@ var binaryAction = function(f) {
     var target = this;
 
     // first argument
-    if (target instanceof Buffer) {} else if (arguments[0] instanceof Buffer) {
+    if (is_buffer(target)) {} else if (is_buffer(arguments[0])) {
       target = arguments[0];
       Array.prototype.shift.apply(arguments);
     } else {
@@ -36,7 +40,7 @@ var binaryAction = function(f) {
 
     // second argument
     var next = arguments[0];
-    if (typeof next == 'string' || next instanceof String || next instanceof Buffer) {
+    if (typeof next == 'string' || next instanceof String || is_buffer(next)) {
       return f.apply(target, arguments);
     }
     throw new Error('Second argument must be a string or a buffer.');
@@ -51,11 +55,11 @@ buffertools.clear = unaryAction(function() {
 });
 
 buffertools.fill = unaryAction(function(data) {
-  var step = typeof data.length === 'undefined'? 1:data.length;
-  for (var i = 0; i < this.length; i+=step) {
-    for (var k = 0; k<step; k++) {
-      this[i+k] = typeof data.length === 'undefined'? data: 
-        (typeof data[k] === 'string'?data[k].charCodeAt(0):data[k]);
+  var step = typeof data.length === 'undefined' ? 1 : data.length;
+  for (var i = 0; i < this.length; i += step) {
+    for (var k = 0; k < step; k++) {
+      this[i + k] = typeof data.length === 'undefined' ? data :
+        (typeof data[k] === 'string' ? data[k].charCodeAt(0) : data[k]);
     }
   }
   return this;
@@ -64,10 +68,10 @@ buffertools.fill = unaryAction(function(data) {
 buffertools.indexOf = unaryAction(function(data, startFrom) {
   startFrom = startFrom || 0;
   if (data.length === 0) return -1;
-  for (var i = startFrom; i < this.length - data.length + 1; i+=1) {
+  for (var i = startFrom; i < this.length - data.length + 1; i += 1) {
     var found = true;
-    for (var j = 0; j<data.length; j++) {
-      var a = this[i+j];
+    for (var j = 0; j < data.length; j++) {
+      var a = this[i + j];
       var b = data[j];
       if (typeof b === 'string') b = b.charCodeAt(0);
       if (a !== b) {
@@ -105,8 +109,8 @@ exports.extend = function() {
   var receivers;
   if (arguments.length > 0) {
     receivers = Array.prototype.slice.call(arguments);
-  } else if (typeof SlowBuffer === 'function') {
-    receivers = [Buffer.prototype, SlowBuffer.prototype];
+  } else if (typeof Uint8Array === 'function') {
+    receivers = [Buffer.prototype, Uint8Array.prototype];
   } else {
     receivers = [Buffer.prototype];
   }
