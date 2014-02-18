@@ -31,10 +31,6 @@ assert.doesNotThrow(function() { buffertools.equals(new Buffer(32), '123123'); }
 assert.doesNotThrow(function() { buffertools.equals(new Buffer(32), new Buffer(48)); });
 
 var a = new Buffer('abcd'), b = new Buffer('abcd'),  c = new Buffer('efgh');
-assert.ok(a.equals(b));
-assert.ok(!a.equals(c));
-assert.ok(a.equals('abcd'));
-assert.ok(!a.equals('efgh'));
 
 assert.ok(a.compare(a) == 0);
 assert.ok(a.compare(c) < 0);
@@ -43,6 +39,11 @@ assert.ok(c.compare(a) > 0);
 assert.ok(a.compare('abcd') == 0);
 assert.ok(a.compare('efgh') < 0);
 assert.ok(c.compare('abcd') > 0);
+
+assert.ok(a.equals(b));
+assert.ok(!a.equals(c));
+assert.ok(a.equals('abcd'));
+assert.ok(!a.equals('efgh'));
 
 b = new Buffer('****');
 assert.equal(b, b.clear());

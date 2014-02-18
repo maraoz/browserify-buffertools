@@ -12,8 +12,7 @@ var buffertools = {};
 var unaryAction = function(f) {
   return function() {
     var target = this;
-    if (target instanceof Buffer) {
-    } else if (arguments[0] instanceof Buffer) {
+    if (target instanceof Buffer) {} else if (arguments[0] instanceof Buffer) {
       target = arguments[0];
       Array.prototype.shift.apply(arguments);
     } else {
@@ -28,8 +27,7 @@ var binaryAction = function(f) {
     var target = this;
 
     // first argument
-    if (target instanceof Buffer) {
-    } else if (arguments[0] instanceof Buffer) {
+    if (target instanceof Buffer) {} else if (arguments[0] instanceof Buffer) {
       target = arguments[0];
       Array.prototype.shift.apply(arguments);
     } else {
@@ -42,13 +40,32 @@ var binaryAction = function(f) {
       return f.apply(target, arguments);
     }
     throw new Error('Second argument must be a string or a buffer.');
-  };  
+  };
 };
 
 buffertools.clear = unaryAction(function() {
-});
-buffertools.equals = binaryAction(function() {
 
+});
+
+buffertools.equals = binaryAction(function(data) {
+  buffertools.compare.bind(this)(data) === 0;
+});
+
+buffertools.compare = binaryAction(function(data) {
+  var buffer = this;
+  var l1 = buffer.length;
+  var l2 = data.length;
+  if (l1 !== l2) {
+    return l1 > l2 ? 1 : -1;
+  }
+  for (var i = 0; i < l1; i++) {
+    var a = buffer[i];
+    var b = data[i];
+    if (typeof b === 'string') b = b.charCodeAt(0);
+    if (a === b) continue;
+    return a > b ? 1 : -1;
+  }
+  return 0;
 });
 
 exports.extend = function() {
@@ -95,20 +112,17 @@ WritableBufferStream.prototype._append = function(buffer, encoding) {
 
   if (Buffer.isBuffer(buffer)) {
     // no action required
-  }
-  else if (typeof buffer == 'string') {
+  } else if (typeof buffer == 'string') {
     // TODO optimize
     buffer = new Buffer(buffer, encoding || 'utf8');
-  }
-  else {
+  } else {
     throw new Error('Argument should be either a buffer or a string.');
   }
 
   // FIXME optimize!
   if (this.buffer) {
     this.buffer = buffertools.concat(this.buffer, buffer);
-  }
-  else {
+  } else {
     this.buffer = new Buffer(buffer.length);
     buffer.copy(this.buffer);
   }
