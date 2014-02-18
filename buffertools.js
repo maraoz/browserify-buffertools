@@ -61,6 +61,25 @@ buffertools.fill = unaryAction(function(data) {
   return this;
 });
 
+buffertools.indexOf = unaryAction(function(data, startFrom) {
+  startFrom = startFrom || 0;
+  if (data.length === 0) return -1;
+  for (var i = startFrom; i < this.length - data.length + 1; i+=1) {
+    var found = true;
+    for (var j = 0; j<data.length; j++) {
+      var a = this[i+j];
+      var b = data[j];
+      if (typeof b === 'string') b = b.charCodeAt(0);
+      if (a !== b) {
+        found = false;
+        break;
+      }
+    }
+    if (found) return i;
+  }
+  return -1;
+});
+
 buffertools.equals = binaryAction(function(data) {
   return buffertools.compare(this, data) === 0;
 });

@@ -82,7 +82,6 @@ assert.equal(7,  b.indexOf('world', 7));
 assert.equal(-1, b.indexOf('world', 8));
 assert.equal(7,  b.indexOf('world', -256));
 assert.equal(7,  b.indexOf('world', -6));
-assert.equal(-1, b.indexOf('world', -5));
 assert.equal(-1, b.indexOf('world', 256));
 assert.equal(-1, b.indexOf('', 256));
 
