@@ -151,8 +151,8 @@ describe('buffertools', function() {
   });
 
   it('reverse should work', function() {
-    ('').should.equal(new Buffer('').reverse());
-    ('For great justice.').should.equal(new Buffer('.ecitsuj taerg roF').reverse());
+    new Buffer('').reverse().equals('').should.be.ok;
+    new Buffer('For great justice.').reverse().equals(new Buffer('.ecitsuj taerg roF')).should.be.ok;
   });
 
   it('edge cases should work', function() {

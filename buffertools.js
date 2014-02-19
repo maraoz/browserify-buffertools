@@ -114,12 +114,19 @@ buffertools.concat = function() {
   var k = 0;
   for (var i = 0; i < arguments.length; i++) {
     for (var j = 0; j < arguments[i].length; j++) {
-      ret[k++] = typeof arguments[i][j] === 'string' ? 
+      ret[k++] = typeof arguments[i][j] === 'string' ?
         arguments[i][j].charCodeAt(0) : arguments[i][j];
     }
   }
   return ret;
 };
+buffertools.reverse = unaryAction(function() {
+  var ret = new Buffer(this.length);
+  for (var i = 0; i < this.length; i++) {
+    ret[i] = this[this.length - i - 1];
+  }
+  return ret;
+});
 
 buffertools.toHex = unaryAction(function() {
   var s = '';
