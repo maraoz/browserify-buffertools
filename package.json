@@ -1,7 +1,7 @@
 {
   "name": "browserify-buffertools",
   "description": "A JavaScript implementation of node-buffertools to work in the browser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "keywords": [
     "buffer",
     "buffers",
