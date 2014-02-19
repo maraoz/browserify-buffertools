@@ -70,6 +70,7 @@ describe('buffertools', function() {
     expect(a.equals(b)).to.be.ok;
     expect(!a.equals(c)).to.be.ok;
     expect(a.equals('abcd')).to.be.ok;
+    expect(b.equals('abcd')).to.be.ok;
     expect(!a.equals('efgh')).to.be.ok;
   });
   it('clear should work', function() {
@@ -122,8 +123,7 @@ describe('buffertools', function() {
   it('toHex/fromHex should work', function() {
     b = new Buffer("\t \r\n");
     ('09200d0a').should.equal(b.toHex());
-    console.log(new Buffer('abcd ').toHex());
-    ('abcd ').should.equal(new Buffer(new Buffer('abcd ').toHex()).fromHex().toString());
+    ('6162636420').should.equal(new Buffer('abcd ').toHex());
     (b.toString()).should.equal( new Buffer('09200d0a').fromHex().toString());
 
     ('').should.equal(new Buffer('').toHex());
@@ -137,13 +137,13 @@ describe('buffertools', function() {
   });
 
   it('concat should work', function() {
-    ('').should.equal(buffertools.concat());
-    ('').should.equal(buffertools.concat(''));
-    ('foobar').should.equal(new Buffer('foo').concat('bar'));
-    ('foobarbaz').should.equal(buffertools.concat(new Buffer('foo'), 'bar', new Buffer('baz')));
+    buffertools.concat().equals('').should.be.ok;
+    buffertools.concat('').equals('').should.be.ok;
+    new Buffer('foo').concat('bar').equals('foobar').should.be.ok;
+    buffertools.concat(new Buffer('foo'), 'bar', new Buffer('baz')).equals('foobarbaz').should.be.ok;
     (function() {
       buffertools.concat('foo', 123, 'baz');
-    }).should.throw();
+    }).should.throw(Error);
     // assert that the buffer is copied, not returned as-is
     a = new Buffer('For great justice.'), b = buffertools.concat(a);
     (a.toString()).should.equal(b.toString());

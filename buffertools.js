@@ -104,13 +104,29 @@ buffertools.compare = binaryAction(function(data) {
   }
   return 0;
 });
+buffertools.concat = function() {
+  var len = 0;
+  for (var i = 0; i < arguments.length; i++) {
+    if (arguments[i].length === undefined) throw Error('all arguments must be strings or Buffers');
+    len += arguments[i].length;
+  }
+  var ret = new Buffer(len);
+  var k = 0;
+  for (var i = 0; i < arguments.length; i++) {
+    for (var j = 0; j < arguments[i].length; j++) {
+      ret[k++] = typeof arguments[i][j] === 'string' ? 
+        arguments[i][j].charCodeAt(0) : arguments[i][j];
+    }
+  }
+  return ret;
+};
 
 buffertools.toHex = unaryAction(function() {
   var s = '';
-  for (var i = 0; i<this.length; i++) {
+  for (var i = 0; i < this.length; i++) {
     var h = this[i].toString(16);
-    if (h.length == 1) h = '0'+h;
-    if (h.length > 2) console.log('strange h ='+h);
+    if (h.length == 1) h = '0' + h;
+    if (h.length > 2) console.log('strange h =' + h);
     s += h;
   }
   return s;
@@ -118,11 +134,11 @@ buffertools.toHex = unaryAction(function() {
 buffertools.fromHex = unaryAction(function() {
   var l = this.length;
   if (l % 2 !== 0) throw new Error('Invalid hex string length');
-  var ret = new Buffer(l/2);
-  for (var i = 0; i<ret.length; i++) {
-    var c1 = String.fromCharCode(this[2*i]);
-    var c2 = String.fromCharCode(this[2*i+1]);
-    ret[i] = parseInt(c1+c2, 16);
+  var ret = new Buffer(l / 2);
+  for (var i = 0; i < ret.length; i++) {
+    var c1 = String.fromCharCode(this[2 * i]);
+    var c2 = String.fromCharCode(this[2 * i + 1]);
+    ret[i] = parseInt(c1 + c2, 16);
   }
   return ret;
 });
