@@ -105,6 +105,28 @@ buffertools.compare = binaryAction(function(data) {
   return 0;
 });
 
+buffertools.toHex = unaryAction(function() {
+  var s = '';
+  for (var i = 0; i<this.length; i++) {
+    var h = this[i].toString(16);
+    if (h.length == 1) h = '0'+h;
+    if (h.length > 2) console.log('strange h ='+h);
+    s += h;
+  }
+  return s;
+});
+buffertools.fromHex = unaryAction(function() {
+  var l = this.length;
+  if (l % 2 !== 0) throw new Error('Invalid hex string length');
+  var ret = new Buffer(l/2);
+  for (var i = 0; i<ret.length; i++) {
+    var c1 = String.fromCharCode(this[2*i]);
+    var c2 = String.fromCharCode(this[2*i+1]);
+    ret[i] = parseInt(c1+c2, 16);
+  }
+  return ret;
+});
+
 exports.extend = function() {
   var receivers;
   if (arguments.length > 0) {
