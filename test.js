@@ -134,6 +134,10 @@ describe('buffertools', function() {
     b[2] = 0x60;
     b[3] = 0x2f;
     ('9895602f').should.equal(b.toHex());
+
+    var neg = new Buffer('ffff', 'hex');
+    neg.toHex().should.equal('ffff');
+
   });
 
   it('concat should work', function() {

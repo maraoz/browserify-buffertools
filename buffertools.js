@@ -133,7 +133,7 @@ buffertools.toHex = unaryAction(function() {
   for (var i = 0; i < this.length; i++) {
     var h = this[i].toString(16);
     if (h.length == 1) h = '0' + h;
-    if (h.length > 2) console.log('strange h =' + h);
+    if (h.length > 2) h = h.substring(1,3);
     s += h;
   }
   return s;
